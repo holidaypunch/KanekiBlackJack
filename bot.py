@@ -3,25 +3,27 @@ from discord.ext import commands
 import random
 import os
 import json
-#from flask import Flask
-#from threading import Thread
+from flask import Flask
+from threading import Thread
 
-#app = Flask("")
+app = Flask("")
 
-#@app.route("/")
-#def home():
-#    return "Bot is alive!"
+@app.route("/")
+def home():
+    return "Bot is alive!"
 
-#def run_flask():
-#    port = int(os.environ.get("PORT", 10000))
-#    app.run(host="0.0.0.0", port=port)
+def run_flask():
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port)
 
-#def keep_alive():
-#    t = Thread(target=run_flask)
-#    t.start()
+def keep_alive():
+    t = Thread(target=run_flask)
+    t.start()
 
 intents = discord.Intents.default()
 intents.message_content = True
+
+flag_reveal = 0
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 
@@ -99,11 +101,18 @@ class BlackjackView(discord.ui.View):
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
 
-        embed.add_field(
-            name="Dealer",
-            value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
-            inline=False
-        )
+        if flag_reveal == 0:
+            embed.add_field(
+                name="Dealer",
+                value=f"{dealer[0]} ?",
+                inline=False
+            )
+        else:
+            embed.add_field(
+                name="Dealer",
+                value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
+                inline=False
+            )
 
         embed.add_field(
             name="You",
@@ -135,6 +144,7 @@ class BlackjackView(discord.ui.View):
 
     @discord.ui.button(label="Stand", style=discord.ButtonStyle.red)
     async def stand(self, interaction: discord.Interaction, button: discord.ui.Button):
+        flag_reveal = 1
         if interaction.user.id != self.user_id:
             await interaction.response.send_message("This is not your game!", ephemeral=True)
             return
@@ -165,6 +175,7 @@ class BlackjackView(discord.ui.View):
 
 @bot.command()
 async def blackjack(ctx, bet: int):
+    flag_reveal = 0
     user = ctx.author.id
     if user not in balances:
         balances[user] = 0  # starting money
@@ -191,5 +202,5 @@ async def blackjack(ctx, bet: int):
     view = BlackjackView(player, dealer, user, bet)
     await ctx.send(embed=embed, view=view)
 
-#keep_alive()
+keep_alive()
 bot.run(os.environ["TOKEN"])
