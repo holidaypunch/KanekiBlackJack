@@ -3,22 +3,22 @@ from discord.ext import commands
 import random
 import os
 import json
-from flask import Flask
-from threading import Thread
+#from flask import Flask
+#from threading import Thread
 
-app = Flask("")
+#app = Flask("")
 
-@app.route("/")
-def home():
-    return "Bot is alive!"
+#@app.route("/")
+#def home():
+#    return "Bot is alive!"
 
-def run_flask():
-    port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+#def run_flask():
+#    port = int(os.environ.get("PORT", 10000))
+#    app.run(host="0.0.0.0", port=port)
 
-def keep_alive():
-    t = Thread(target=run_flask)
-    t.start()
+#def keep_alive():
+#    t = Thread(target=run_flask)
+#    t.start()
 
 intents = discord.Intents.default()
 intents.message_content = True
@@ -191,5 +191,5 @@ async def blackjack(ctx, bet: int):
     view = BlackjackView(player, dealer, user, bet)
     await ctx.send(embed=embed, view=view)
 
-keep_alive()
+#keep_alive()
 bot.run(os.environ["TOKEN"])
