@@ -95,23 +95,15 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
-        flag_reveal = False
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
 
-        if flag_reveal == True:
-            embed.add_field(
-                name="Dealer",
-                value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
-                inline=False
-            )
-        else:
-            embed.add_field(
-                name="Dealer",
-                value=f"{dealer[0]} ?",
-                inline=False
-            )
+        embed.add_field(
+            name="Dealer",
+            value=f"{dealer[0]} ?",
+            inline=False
+        )
 
         embed.add_field(
             name="You",
