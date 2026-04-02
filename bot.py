@@ -95,17 +95,9 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
-        flag_reveal = 0
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
-
-        if flag_reveal != 0:        
-            embed.add_field(
-                    name="Dealer",
-                    value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
-                    inline=False
-            )
 
         embed.add_field(
             name="You",
@@ -137,7 +129,6 @@ class BlackjackView(discord.ui.View):
 
     @discord.ui.button(label="Stand", style=discord.ButtonStyle.red)
     async def stand(self, interaction: discord.Interaction, button: discord.ui.Button):
-        flag_reveal = 1
         if interaction.user.id != self.user_id:
             await interaction.response.send_message("This is not your game!", ephemeral=True)
             return
