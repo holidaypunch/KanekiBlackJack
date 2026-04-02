@@ -101,7 +101,7 @@ class BlackjackView(discord.ui.View):
 
         embed.add_field(
             name="Dealer",
-            value=f"{dealer[0]} ?",
+            value=f"{self.dealer[0]} ?",
             inline=False
         )
 
