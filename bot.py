@@ -102,15 +102,14 @@ class BlackjackView(discord.ui.View):
         embed = discord.Embed(title="🃏 Blackjack")
 
         if flag_reveal == 0:
-            embed.add_field(
-                name="Dealer",
-                value=f"{dealer[0]} ?",
-                inline=False
-            )
+            dealer_value = f"{dealer[0]} ?"
         else:
-            embed.add_field(
+            dealer_value = f"{format_hand(self.dealer)} (Total {total(self.dealer)})"
+            
+
+        embed.add_field(
                 name="Dealer",
-                value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
+                value=dealer_value,
                 inline=False
             )
 
