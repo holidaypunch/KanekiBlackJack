@@ -23,8 +23,6 @@ def keep_alive():
 intents = discord.Intents.default()
 intents.message_content = True
 
-flag_reveal = 0
-
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # Card deck and balance
@@ -97,6 +95,7 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
+        flag_reveal = 0
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -174,7 +173,6 @@ class BlackjackView(discord.ui.View):
 
 @bot.command()
 async def blackjack(ctx, bet: int):
-    flag_reveal = 0
     user = ctx.author.id
     if user not in balances:
         balances[user] = 0  # starting money
