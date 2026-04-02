@@ -100,16 +100,11 @@ class BlackjackView(discord.ui.View):
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
 
-        if flag_reveal == 0:
-            dealer_value = f"{dealer[0]} ?"
-        else:
-            dealer_value = f"{format_hand(self.dealer)} (Total {total(self.dealer)})"
-            
-
-        embed.add_field(
-                name="Dealer",
-                value=dealer_value,
-                inline=False
+        if flag_reveal != 0:        
+            embed.add_field(
+                    name="Dealer",
+                    value=f"{format_hand(self.dealer)} (Total {total(self.dealer)})",
+                    inline=False
             )
 
         embed.add_field(
