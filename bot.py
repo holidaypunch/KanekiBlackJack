@@ -70,7 +70,7 @@ async def work(ctx, amount: int):
         await ctx.send("Amount must be positive.")
         return
 
-    if amount > 100000
+    if amount > 100000:
         await ctx.send("The maximum amount of work cannot exceed 100000.")
         return
 
