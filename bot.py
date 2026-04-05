@@ -5,6 +5,7 @@ import os
 import json
 from flask import Flask
 from threading import Thread
+import time
 
 app = Flask("")
 
@@ -24,6 +25,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
+work_cooldowns = {}
 
 # Card deck and balance
 cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
@@ -50,11 +52,26 @@ async def balance(ctx):
 
 @bot.command()
 async def work(ctx, amount: int):
-
     user = ctx.author.id
+    now = time.time()
+
+    if user in work_cooldowns:
+        last_work = work_cooldowns[user]
+
+        if now - last_work < 300:  # 300 seconds = 5 minutes
+            remaining = int(300 - (now - last_work))
+            minutes = remaining // 60
+            seconds = remaining % 60
+
+            await ctx.send(f"⏳ Wait {minutes}m {seconds}s before working again.")
+            return
 
     if amount <= 0:
         await ctx.send("Amount must be positive.")
+        return
+
+    if amount > 100000
+        await ctx.send("The maximum amount of work cannot exceed 100000.")
         return
 
     if user not in balances:
