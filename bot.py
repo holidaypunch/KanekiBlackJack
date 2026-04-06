@@ -80,6 +80,7 @@ async def work(ctx, amount: int):
 
     balances[user] += amount
     save_balances()
+    work_cooldowns[user] = now
 
     await ctx.send(f"💰 {ctx.author.name} worked and earned ${amount}!\nBalance: ${balances[user]}")
 
