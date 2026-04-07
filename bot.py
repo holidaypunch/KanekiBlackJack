@@ -102,15 +102,15 @@ async def daily(ctx):
             await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claming dailies again.")
             return
 
-            if user not in balances:
-                balances[user] = 0
-                save_balances()
+    if user not in balances:
+        balances[user] = 0
+        save_balances()
 
-            balances[user] += 250000
-            save_balances()
-            daily_cooldowns_cooldowns[user] = now
+    balances[user] += 250000
+    save_balances()
+    daily_cooldowns_cooldowns[user] = now
 
-            await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
+    await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
 
 def draw_card():
     return random.choice(cards)
