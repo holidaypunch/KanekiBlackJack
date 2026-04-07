@@ -99,7 +99,7 @@ async def daily(ctx):
             minutes = (remaining % 3600) // 60
             seconds = remaining % 60
 
-            await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claming dailies again.")
+            await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claiming dailies again.")
             return
 
     if user not in balances:
