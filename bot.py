@@ -85,7 +85,7 @@ async def work(ctx, amount: int):
 
     await ctx.send(f"💰 {ctx.author.name} worked and earned ${amount}!\nBalance: ${balances[user]}")
 
-@bot.command
+@bot.command()
 async def daily(ctx):
     user = ctx.author.id
     now = time.time()
