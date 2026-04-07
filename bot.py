@@ -108,7 +108,7 @@ async def daily(ctx):
 
     balances[user] += 250000
     save_balances()
-    daily_cooldowns_cooldowns[user] = now
+    daily_cooldowns[user] = now
 
     await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
 
