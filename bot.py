@@ -26,6 +26,7 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix="!", intents=intents)
 work_cooldowns = {}
+daily_cooldowns = {}
 
 # Card deck and balance
 cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
@@ -83,6 +84,33 @@ async def work(ctx, amount: int):
     work_cooldowns[user] = now
 
     await ctx.send(f"💰 {ctx.author.name} worked and earned ${amount}!\nBalance: ${balances[user]}")
+
+@bot.command
+async def daily(ctx):
+    user = ctx.author.id
+    now = time.time()
+
+    if user in daily_cooldowns:
+        last_daily = daily_cooldowns[user]
+
+        if now - last_daily < 86400:
+            remaining = int(86400 - (now - last_daily))
+            hours = remaining // 3600
+            minutes = (remaining % 3600) // 60
+            seconds = remaining % 60
+
+            await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claming dailies again.")
+            return
+
+            if user not in balances:
+                balances[user] = 0
+                save_balances()
+
+            balances[user] += 250000
+            save_balances()
+            daily_cooldowns_cooldowns[user] = now
+
+            await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
 
 def draw_card():
     return random.choice(cards)
