@@ -13,11 +13,6 @@ app = Flask("")
 def home():
     return "Bot is alive!"
 
-@app.route("/balances")
-def show_balances():
-    with open("balances.json", "r") as f:
-        return f.read()
-
 def run_flask():
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
@@ -52,7 +47,7 @@ except:
     banks = {}
 
 def save_banks():
-    with open("banks.json", "r") as f:
+    with open("banks.json", "w") as f:
         json.dump(banks, f)
 
 @bot.command()
