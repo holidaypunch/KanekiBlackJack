@@ -171,6 +171,56 @@ async def bank(ctx):
     # Show the bank
     await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
 
+@bot.command()
+async def rob(ctx, member: discord.Member, amount: int):
+    user = ctx.author.id
+    victim = member.id
+
+    # prevent self rob
+    if robber == victim:
+        await ctx.send("You can't rob yourself 💀")
+        return
+
+    if user not in balances:
+        balances[user] = 0
+    if victim not in balances:
+        balances[victim] = 0
+
+    if amount > balances[victim]:
+        await ctx.send("This person does not have enough money to rob 😢")
+        return
+
+    balances[user] += amount
+    balances[victim] -= amount
+    save_balances()
+
+    await ctx.send(f"🤑 You robbed ${amount} from {member.name}!")
+
+@bot.command()
+async def donate(ctx, member: discord.Member, amount: int):
+    user = ctx.author.id
+    victim = member.id
+
+    # prevent self donate
+    if robber == victim:
+        await ctx.send("You can't donate to yourself 💀")
+        return
+
+    if user not in balances:
+        balances[user] = 0
+    if victim not in balances:
+        balances[victim] = 0
+
+    if amount > balances[user]:
+        await ctx.send("You don't have enough money to donate 😢")
+        return
+
+    balances[user] -= amount
+    balances[victim] += amount
+    save_balances()
+
+    await ctx.send(f"❤️ You donated ${amount} to {member.name}!")
+
 def draw_card():
     return random.choice(cards)
 
