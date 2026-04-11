@@ -177,7 +177,7 @@ async def rob(ctx, member: discord.Member, amount: int):
     victim = member.id
 
     # prevent self rob
-    if robber == victim:
+    if user == victim:
         await ctx.send("You can't rob yourself 💀")
         return
 
@@ -202,7 +202,7 @@ async def donate(ctx, member: discord.Member, amount: int):
     victim = member.id
 
     # prevent self donate
-    if robber == victim:
+    if user == victim:
         await ctx.send("You can't donate to yourself 💀")
         return
 
