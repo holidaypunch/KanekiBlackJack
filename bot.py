@@ -125,6 +125,10 @@ async def daily(ctx):
 @bot.command()
 async def deposit(ctx, amount: int):
     user = ctx.author.id
+    
+    if user not in banks:
+        banks[user] = 0
+        save_banks()
 
     if amount > balances[user]:
         await ctx.send(f"You don't have enough money to deposit!! Put valid amount.")
