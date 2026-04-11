@@ -141,6 +141,10 @@ async def deposit(ctx, amount: int):
 async def withdraw(ctx, amount: int):
     user = ctx.author.id
 
+    if user not in banks:
+        banks[user] = 0
+        save_banks()
+
     if amount > banks[user]:
         await ctx.send(f"You don't have enough money to withdraw!! Put valid amount.")
         return
