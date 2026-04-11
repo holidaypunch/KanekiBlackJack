@@ -57,6 +57,7 @@ async def balance(ctx):
     # If the user doesn't exist in balances, start them at 0
     if user not in balances:
         balances[user] = 0
+        save_balances()
 
     # Show the balance
     await ctx.send(f"💰 {ctx.author.name}, your balance is ${balances[user]}")
@@ -167,8 +168,9 @@ async def bank(ctx):
     # If the user doesn't exist in balances, start them at 0
     if user not in bank:
         banks[user] = 0
+        save_banks()
 
-    # Show the balance
+    # Show the bank
     await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
 
 def draw_card():
