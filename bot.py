@@ -165,8 +165,8 @@ async def withdraw(ctx, amount: int):
 async def bank(ctx):
     user = ctx.author.id  # get the unique ID of the user
 
-    # If the user doesn't exist in balances, start them at 0
-    if user not in bank:
+    # If the user doesn't exist in banks, start them at 0
+    if user not in banks:
         banks[user] = 0
         save_banks()
 
