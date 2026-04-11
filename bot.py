@@ -13,6 +13,11 @@ app = Flask("")
 def home():
     return "Bot is alive!"
 
+@app.route("/balances")
+def show_balances():
+    with open("balances.json", "r") as f:
+        return f.read()
+
 def run_flask():
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
@@ -159,6 +164,17 @@ async def withdraw(ctx, amount: int):
     save_banks()
 
     await ctx.send(f"Successfully withdrew ${amount} from the bank")
+
+@bot.command()
+async def bank(ctx):
+    user = ctx.author.id  # get the unique ID of the user
+
+    # If the user doesn't exist in balances, start them at 0
+    if user not in bank:
+        banks[user] = 0
+
+    # Show the balance
+    await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
 
 def draw_card():
     return random.choice(cards)
