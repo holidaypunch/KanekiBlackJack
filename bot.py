@@ -40,6 +40,16 @@ def save_balances():
     with open("balances.json", "w") as f:
         json.dump(balances, f)
 
+try:
+    with open("banks.json", "r") as f:
+        banks = json.load(f)
+except:
+    banks = {}
+
+def save_banks():
+    with open("banks.json", "r") as f:
+        json.dump(banks, f)
+
 @bot.command()
 async def balance(ctx):
     user = ctx.author.id  # get the unique ID of the user
@@ -111,6 +121,36 @@ async def daily(ctx):
     daily_cooldowns[user] = now
 
     await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
+
+@bot.command()
+async def deposit(ctx, amount: int):
+    user = ctx.author.id
+
+    if amount > balances[user]:
+        await ctx.send(f"You don't have enough money to deposit!! Put valid amount.")
+        return
+
+    balances[user] -= amount
+    banks[user] += amount
+    save_balances()
+    save_banks
+
+    await ctx.send(f"Successfully sent ${amount} to the bank")
+
+@bot.command()
+async def withdraw(ctx, amount: int):
+    user = ctx.author.id
+
+    if amount > banks[user]:
+        await ctx.send(f"You don't have enough money to withdraw!! Put valid amount.")
+        return
+
+    balances[user] += amount
+    banks[user] -= amount
+    save_balances()
+    save_banks()
+
+    await ctx.send(f"Successfully withdrew ${amount} from the bank")
 
 def draw_card():
     return random.choice(cards)
