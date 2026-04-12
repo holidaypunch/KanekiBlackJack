@@ -176,7 +176,20 @@ async def daily(ctx):
             minutes = (remaining % 3600) // 60
             seconds = remaining % 60
 
-            await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claiming dailies again.")
+            # attach image
+            file = discord.File("waiting.png", filename="waiting.png")
+
+            embed = discord.Embed(
+                title="🎁 Can't claim daily now!!",
+                description=f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claiming dailies again.",
+                color=discord.Color.gold()
+            )
+
+            embed.set_thumbnail(url="attachment://waiting.png")
+
+            await ctx.send(file=file, embed=embed)
+
+            #await ctx.send(f"⏳ Daily already claimed!! Wait {hours}h {minutes}m {seconds}s before claiming dailies again.")
             return
 
     if user not in balances:
@@ -187,7 +200,22 @@ async def daily(ctx):
     save_balances()
     daily_cooldowns[user] = now
 
-    await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
+    # attach image
+    file = discord.File("dollars.png", filename="dollars.png")
+
+    embed = discord.Embed(
+        title="🎁 Daily",
+        description=f"{ctx.author.name} claimed $250000!",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://dollars.png")
+
+    await ctx.send(file=file, embed=embed)
+
+    #await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
 
 @bot.command()
 async def deposit(ctx, amount: int):
