@@ -59,7 +59,20 @@ async def balance(ctx):
         balances[user] = 0
 
     # Show the balance
-    await ctx.send(f"💰 {ctx.author.name}, your balance is ${balances[user]}")
+    #await ctx.send(f"💰 {ctx.author.name}, your balance is ${balances[user]}")
+    # attach image
+    file = discord.File("wallet.png", filename="wallet.png")
+
+    embed = discord.Embed(
+        title="💵 Your balance",
+        description=f"💰 {ctx.author.name}, your balance is ${balances[user]}",
+        color=discord.Color.gold()
+    )
+
+    embed.set_thumbnail(url="attachment://wallet.png")
+
+    await ctx.send(file=file, embed=embed)
+    
 
 @bot.command()
 async def work(ctx, amount: int):
@@ -74,15 +87,54 @@ async def work(ctx, amount: int):
             minutes = remaining // 60
             seconds = remaining % 60
 
-            await ctx.send(f"⏳ Wait {minutes}m {seconds}s before working again.")
+            # attach image
+            file = discord.File("waiting.png", filename="waiting.png")
+
+            embed = discord.Embed(
+                title="💼 Can't work now!!",
+                description=f"⏳ Wait {minutes}m {seconds}s before working again.",
+                color=discord.Color.gold()
+            )
+
+            embed.set_thumbnail(url="attachment://waiting.png")
+
+            await ctx.send(file=file, embed=embed)
+
+            #await ctx.send(f"⏳ Wait {minutes}m {seconds}s before working again.")
             return
 
     if amount <= 0:
-        await ctx.send("Amount must be positive.")
+        #await ctx.send("Amount must be positive.")
+        
+        # attach image
+        file = discord.File("weary.png", filename="weary.png")
+
+        embed = discord.Embed(
+            title="💼 Invalid Work!!",
+            description=f"Amount must be positive.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://weary.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     if amount > 100000:
-        await ctx.send("The maximum amount of work cannot exceed 100000.")
+        #await ctx.send("The maximum amount of work cannot exceed 100000.")
+        
+        # attach image
+        file = discord.File("weary.png", filename="weary.png")
+
+        embed = discord.Embed(
+            title="💼 Invalid Work!!",
+            description=f"The maximum amount of work cannot exceed 100000.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://weary.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     if user not in balances:
