@@ -93,7 +93,22 @@ async def work(ctx, amount: int):
     save_balances()
     work_cooldowns[user] = now
 
-    await ctx.send(f"💰 {ctx.author.name} worked and earned ${amount}!\nBalance: ${balances[user]}")
+    # attach image
+    file = discord.File("work.png", filename="work.png")
+
+    embed = discord.Embed(
+        title="💼 Work",
+        description=f"{ctx.author.name} worked and earned ${amount}!",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://work.png")
+
+    await ctx.send(file=file, embed=embed)
+
+    #await ctx.send(f"💰 {ctx.author.name} worked and earned ${amount}!\nBalance: ${balances[user]}")
 
 @bot.command()
 async def daily(ctx):
