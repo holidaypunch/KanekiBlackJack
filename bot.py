@@ -50,29 +50,6 @@ def save_banks():
     with open("banks.json", "w") as f:
         json.dump(banks, f)
 
-#@bot.command()
-#async def balance(ctx):
-#   user = ctx.author.id  # get the unique ID of the user
-
-    # If the user doesn't exist in balances, start them at 0
-#   if user not in balances:
-#        balances[user] = 0
-
-    # Show the balance
-    #await ctx.send(f"💰 {ctx.author.name}, your balance is ${balances[user]}")
-    # attach image
-#   file = discord.File("wallet.png", filename="wallet.png")
-
-#   embed = discord.Embed(
-#       title="💵 Your balance",
-#       description=f"💰 {ctx.author.name}, your balance is ${balances[user]}",
-#       color=discord.Color.gold()
-#   )
-
-#   embed.set_thumbnail(url="attachment://wallet.png")
-
-#   await ctx.send(file=file, embed=embed)
-
 @bot.command()
 async def balance(ctx, member: discord.Member = None):
     # If the user doesn't exist in balances, start them at 0
