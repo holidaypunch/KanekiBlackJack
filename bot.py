@@ -442,6 +442,7 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
+        self.file = file        # Thumbnail update
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -458,7 +459,7 @@ class BlackjackView(discord.ui.View):
             inline=False
         )
 
-        await interaction.response.edit_message(embed=embed, view=self)
+        await interaction.response.edit_message(embed=embed, attachments = [self.file], view=self)
 
     @discord.ui.button(label="Hit", style=discord.ButtonStyle.green)
     async def hit(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -475,7 +476,7 @@ class BlackjackView(discord.ui.View):
             embed.add_field(name="Your hand", value=format_hand(self.player))
             
             # Update balance
-            await interaction.response.edit_message(embed=embed, view=None)
+            await interaction.response.edit_message(embed=embed, attachments = [self.file], view=None)
             return
 
         await self.update(interaction, interaction.message)
@@ -508,7 +509,7 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
 
-        await interaction.response.edit_message(embed=embed, view=None)
+        await interaction.response.edit_message(embed=embed, attachments = [self.file], view=None)
 
 @bot.command()
 async def blackjack(ctx, bet: int):
@@ -540,9 +541,9 @@ async def blackjack(ctx, bet: int):
 
     embed.set_thumbnail(url="attachment://dealer2.png")
     
-    view = BlackjackView(player, dealer, user, bet)
+    view = BlackjackView(player, dealer, user, bet, file)
     
-    await ctx.send(embed=embed, view=view)
+    await ctx.send(file=file, embed=embed, view=view)
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
