@@ -436,7 +436,7 @@ def format_hand(hand):
     return " ".join(hand)
 
 class BlackjackView(discord.ui.View):
-    def __init__(self, player, dealer, user_id, bet):
+    def __init__(self, player, dealer, user_id, bet, file):
         super().__init__(timeout=60)
         self.player = player
         self.dealer = dealer
