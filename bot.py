@@ -72,6 +72,26 @@ async def balance(ctx):
     embed.set_thumbnail(url="attachment://wallet.png")
 
     await ctx.send(file=file, embed=embed)
+
+@bot.command()
+async def balance(ctx, member: discord.Member):
+    # If the user doesn't exist in balances, start them at 0
+    if member.id not in balances:
+        balances[member.id] = 0
+
+    # Show the balance
+    # attach image
+    file = discord.File("wallet.png", filename="wallet.png")
+
+    embed = discord.Embed(
+        title=f"💵 {member.name}'s balance",
+        description=f"💰 {member.name}'s balance is ${balances[member.id]}",
+        color=discord.Color.gold()
+    )
+
+    embed.set_thumbnail(url="attachment://wallet.png")
+
+    await ctx.send(file=file, embed=embed)
     
 
 @bot.command()
@@ -273,7 +293,19 @@ async def rob(ctx, member: discord.Member, amount: int):
 
     # prevent self rob
     if user == victim:
-        await ctx.send("You can't rob yourself 💀")
+        #await ctx.send("You can't rob yourself 💀")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Robbing Failed!!",
+            description="You can't rob yourself 💀",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     if user not in balances:
@@ -282,14 +314,41 @@ async def rob(ctx, member: discord.Member, amount: int):
         balances[victim] = 0
 
     if amount > balances[victim]:
-        await ctx.send("This person does not have enough money to rob 😢")
+        #await ctx.send("This person does not have enough money to rob 😢")
+        # attach image
+        file = discord.File("weary.png", filename="weary.png")
+
+        embed = discord.Embed(
+            title="🚔 Robbing Failed!!",
+            description="This person does not have enough money to rob 😢",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://weary.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     balances[user] += amount
     balances[victim] -= amount
     save_balances()
 
-    await ctx.send(f"🤑 You robbed ${amount} from {member.name}!")
+    # attach image
+    file = discord.File("yoink.png", filename="yoink.png")
+
+    embed = discord.Embed(
+        title="🥷 Robbed Successfully",
+        description=f"🤑 You robbed ${amount} from {member.name}!",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://yoink.png")
+
+    await ctx.send(file=file, embed=embed)
+
+    #await ctx.send(f"🤑 You robbed ${amount} from {member.name}!")
 
 @bot.command()
 async def donate(ctx, member: discord.Member, amount: int):
@@ -298,7 +357,19 @@ async def donate(ctx, member: discord.Member, amount: int):
 
     # prevent self donate
     if user == victim:
-        await ctx.send("You can't donate to yourself 💀")
+        #await ctx.send("You can't donate to yourself 💀")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Donating Failed!!",
+            description="You can't donate to yourself 💀",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     if user not in balances:
@@ -307,14 +378,39 @@ async def donate(ctx, member: discord.Member, amount: int):
         balances[victim] = 0
 
     if amount > balances[user]:
-        await ctx.send("You don't have enough money to donate 😢")
+        #await ctx.send("You don't have enough money to donate 😢")
+        # attach image
+        file = discord.File("weary.png", filename="weary.png")
+
+        embed = discord.Embed(
+            title="🚔 Donating Failed!!",
+            description="You don't have enough money to donate 😢",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://weary.png")
         return
 
     balances[user] -= amount
     balances[victim] += amount
     save_balances()
 
-    await ctx.send(f"❤️ You donated ${amount} to {member.name}!")
+    # attach image
+    file = discord.File("dollars.png", filename="dollars.png")
+
+    embed = discord.Embed(
+        title="💸 Donated Successfully",
+        description=f"❤️ You donated ${amount} to {member.name}!",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://dollars.png")
+
+    await ctx.send(file=file, embed=embed)
+
+    #await ctx.send(f"❤️ You donated ${amount} to {member.name}!")
 
 def draw_card():
     return random.choice(cards)
@@ -437,6 +533,9 @@ async def blackjack(ctx, bet: int):
     embed = discord.Embed(title="🃏 Blackjack")
     embed.add_field(name="Dealer", value=f"{dealer[0]} ?", inline=False)
     embed.add_field(name="You", value=f"{format_hand(player)} ({total(player)})", inline=False)
+    # attach image
+    file = discord.File("dealer2.png", filename="dealer2.png")
+    embed.set_thumbnail(url="attachment://dealer2.png")
 
     view = BlackjackView(player, dealer, user, bet)
     await ctx.send(embed=embed, view=view)
