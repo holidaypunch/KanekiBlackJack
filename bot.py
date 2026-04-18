@@ -531,14 +531,17 @@ async def blackjack(ctx, bet: int):
     player = [draw_card(), draw_card()]
     dealer = [draw_card(), draw_card()]
 
+    # attach image
+    file = discord.File("dealer2.png", filename="dealer2.png")
+
     embed = discord.Embed(title="🃏 Blackjack")
     embed.add_field(name="Dealer", value=f"{dealer[0]} ?", inline=False)
     embed.add_field(name="You", value=f"{format_hand(player)} ({total(player)})", inline=False)
+
+    embed.set_thumbnail(url="attachment://dealer2.png")
     
     view = BlackjackView(player, dealer, user, bet)
-    # attach image
-    file = discord.File("dealer2.png", filename="dealer2.png")
-    embed.set_thumbnail(url="attachment://dealer2.png")
+    
     await ctx.send(file=file, embed=embed, view=view)
 
 keep_alive()
