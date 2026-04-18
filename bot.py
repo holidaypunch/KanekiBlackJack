@@ -539,7 +539,7 @@ async def blackjack(ctx, bet: int):
     # attach image
     file = discord.File("dealer2.png", filename="dealer2.png")
     embed.set_thumbnail(url="attachment://dealer2.png")
-    await ctx.send(embed=embed, view=view)
+    await ctx.send(file=file, embed=embed, view=view)
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
