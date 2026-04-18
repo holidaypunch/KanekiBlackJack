@@ -442,6 +442,7 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
+        self.file = file        # Thumbnail
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -540,7 +541,7 @@ async def blackjack(ctx, bet: int):
 
     embed.set_thumbnail(url="attachment://dealer2.png")
     
-    view = BlackjackView(player, dealer, user, bet)
+    view = BlackjackView(player, dealer, user, bet, file)
     
     await ctx.send(file=file, embed=embed, view=view)
 
