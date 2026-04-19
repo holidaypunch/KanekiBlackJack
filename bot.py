@@ -458,8 +458,8 @@ class BlackjackView(discord.ui.View):
             inline=False
         )
 
-        #embed.set_thumbnail(url=self.thumbnail_url)
-        await interaction.response.edit_message(embed=embed, view=self)
+        embed.set_thumbnail(url=self.thumbnail_url)
+        await interaction.response.edit_message(embed=embed, attachments=[], view=self)
 
     @discord.ui.button(label="Hit", style=discord.ButtonStyle.green)
     async def hit(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -474,10 +474,10 @@ class BlackjackView(discord.ui.View):
             # Player busts → lose bet
             embed = discord.Embed(title="💥 Bust! You lose.")
             embed.add_field(name="Your hand", value=format_hand(self.player))
-            #embed.set_thumbnail(url=self.thumbnail_url)
+            embed.set_thumbnail(url=self.thumbnail_url)
             
             # Update balance
-            await interaction.response.edit_message(embed=embed, view=None)
+            await interaction.response.edit_message(embed=embed, attachments=[], view=None)
             return
 
         await self.update(interaction, interaction.message)
@@ -509,9 +509,9 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="Dealer", value=f"{format_hand(self.dealer)} ({dealer_total})", inline=False)
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
-        #embed.set_thumbnail(url=self.thumbnail_url)
+        embed.set_thumbnail(url=self.thumbnail_url)
 
-        await interaction.response.edit_message(embed=embed, view=None)
+        await interaction.response.edit_message(embed=embed, attachments=[], view=None)
 
 @bot.command()
 async def blackjack(ctx, bet: int):
