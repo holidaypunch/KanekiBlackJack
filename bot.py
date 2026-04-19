@@ -436,13 +436,13 @@ def format_hand(hand):
     return " ".join(hand)
 
 class BlackjackView(discord.ui.View):
-    def __init__(self, player, dealer, user_id, bet, file):
+    def __init__(self, player, dealer, user_id, bet):
         super().__init__(timeout=60)
         self.player = player
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
-        self.file = file        # Thumbnail update
+        self.thumbnail_url = None        # Thumbnail update
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -459,6 +459,7 @@ class BlackjackView(discord.ui.View):
             inline=False
         )
 
+        embed.set_thumbnail(url=self.thumbnail_url)
         await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Hit", style=discord.ButtonStyle.green)
@@ -474,6 +475,7 @@ class BlackjackView(discord.ui.View):
             # Player busts → lose bet
             embed = discord.Embed(title="💥 Bust! You lose.")
             embed.add_field(name="Your hand", value=format_hand(self.player))
+            embed.set_thumbnail(url=self.thumbnail_url)
             
             # Update balance
             await interaction.response.edit_message(embed=embed, view=None)
@@ -508,6 +510,7 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="Dealer", value=f"{format_hand(self.dealer)} ({dealer_total})", inline=False)
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
+        embed.set_thumbnail(url=self.thumbnail_url)
 
         await interaction.response.edit_message(embed=embed, view=None)
 
@@ -565,9 +568,14 @@ async def blackjack(ctx, bet: int):
 
     embed.set_thumbnail(url="attachment://dealer2.png")
     
-    view = BlackjackView(player, dealer, user, bet, file)
+    view = BlackjackView(player, dealer, user, bet)
     
-    await ctx.send(file=file, embed=embed, view=view)
+    msg = await ctx.send(file=file, embed=embed, view=view)
+
+    # Discord re-hosts the file and gives you a permanent CDN URL.
+    # Grab it and hand it to the view so update() can reuse it.
+    thumbnail_url = msg.embeds[0].thumbnail.url
+    view.thumbnail_url = thumbnail_url
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
