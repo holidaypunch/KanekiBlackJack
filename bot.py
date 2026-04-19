@@ -569,7 +569,12 @@ async def blackjack(ctx, bet: int):
     
     view = BlackjackView(player, dealer, user, bet)
     
-    await ctx.send(file=file, embed= embed, view=view)
+    msg = await ctx.send(file=file, embed=embed, view=view)
+
+    # Discord re-hosts the file and gives you a permanent CDN URL.
+    # Grab it and hand it to the view so update() can reuse it.
+    thumbnail_url = msg.embeds[0].thumbnail.url
+    view.thumbnail_url = thumbnail_url
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
