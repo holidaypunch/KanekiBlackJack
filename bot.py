@@ -436,13 +436,12 @@ def format_hand(hand):
     return " ".join(hand)
 
 class BlackjackView(discord.ui.View):
-    def __init__(self, player, dealer, user_id, bet, thumbnail_url):
+    def __init__(self, player, dealer, user_id, bet):
         super().__init__(timeout=60)
         self.player = player
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
-        self.thumbnail_url = thumbnail_url
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -559,19 +558,18 @@ async def blackjack(ctx, bet: int):
     player = [draw_card(), draw_card()]
     dealer = [draw_card(), draw_card()]
 
-    # Step 1: send file alone to get the CDN URL
-    msg = await ctx.send(file=discord.File("dealer2.png", filename="dealer2.png"))
-    thumbnail_url = msg.attachments[0].url
+    #attach image
+    file=discord.File("dealer2.png", filename="dealer2.png")
 
     embed = discord.Embed(title="🃏 Blackjack")
     embed.add_field(name="Dealer", value=f"{dealer[0]} ?", inline=False)
     embed.add_field(name="You", value=f"{format_hand(player)} ({total(player)})", inline=False)
 
-    embed.set_thumbnail(url=thumbnail_url)
+    embed.set_thumbnail(url="attachment://dealer2.png")
     
-    view = BlackjackView(player, dealer, user, bet, thumbnail_url)
+    view = BlackjackView(player, dealer, user, bet)
     
-    await msg.edit(embed= embed, view=view)
+    await ctx.send(file=file, embed= embed, view=view)
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
