@@ -442,7 +442,6 @@ class BlackjackView(discord.ui.View):
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
-        self.thumbnail_url = None        # Thumbnail update
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
