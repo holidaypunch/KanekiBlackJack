@@ -436,12 +436,13 @@ def format_hand(hand):
     return " ".join(hand)
 
 class BlackjackView(discord.ui.View):
-    def __init__(self, player, dealer, user_id, bet):
+    def __init__(self, player, dealer, user_id, bet, thumbnail_url):
         super().__init__(timeout=60)
         self.player = player
         self.dealer = dealer
         self.user_id = user_id  # Track the player
         self.bet = bet          # Track their bet
+        self.thumbnail_url = thumbnail_url
 
     async def update(self, interaction, message):
         embed = discord.Embed(title="🃏 Blackjack")
@@ -558,23 +559,19 @@ async def blackjack(ctx, bet: int):
     player = [draw_card(), draw_card()]
     dealer = [draw_card(), draw_card()]
 
-    # attach image
-    file = discord.File("dealer2.png", filename="dealer2.png")
+    # Step 1: send file alone to get the CDN URL
+    msg = await ctx.send(file=discord.File("dealer2.png", filename="dealer2.png"))
+    thumbnail_url = msg.attachments[0].url
 
     embed = discord.Embed(title="🃏 Blackjack")
     embed.add_field(name="Dealer", value=f"{dealer[0]} ?", inline=False)
     embed.add_field(name="You", value=f"{format_hand(player)} ({total(player)})", inline=False)
 
-    embed.set_thumbnail(url="attachment://dealer2.png")
+    embed.set_thumbnail(url=thumbnail_url)
     
-    view = BlackjackView(player, dealer, user, bet)
+    view = BlackjackView(player, dealer, user, bet, thumbnail_url)
     
-    msg = await ctx.send(file=file, embed=embed, view=view)
-
-    # Discord re-hosts the file and gives you a permanent CDN URL.
-    # Grab it and hand it to the view so update() can reuse it.
-    thumbnail_url = msg.embeds[0].thumbnail.url
-    view.thumbnail_url = thumbnail_url
+    await msg.edit(embed= embed, view=view)
 
 keep_alive()
 bot.run(os.environ["TOKEN"])
