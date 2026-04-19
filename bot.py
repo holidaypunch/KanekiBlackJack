@@ -459,7 +459,7 @@ class BlackjackView(discord.ui.View):
             inline=False
         )
 
-        await interaction.response.edit_message(embed=embed, attachments = [self.file], view=self)
+        await interaction.response.edit_message(embed=embed, view=self)
 
     @discord.ui.button(label="Hit", style=discord.ButtonStyle.green)
     async def hit(self, interaction: discord.Interaction, button: discord.ui.Button):
@@ -476,7 +476,7 @@ class BlackjackView(discord.ui.View):
             embed.add_field(name="Your hand", value=format_hand(self.player))
             
             # Update balance
-            await interaction.response.edit_message(embed=embed, attachments = [self.file], view=None)
+            await interaction.response.edit_message(embed=embed, view=None)
             return
 
         await self.update(interaction, interaction.message)
@@ -509,7 +509,7 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
 
-        await interaction.response.edit_message(embed=embed, attachments = [self.file], view=None)
+        await interaction.response.edit_message(embed=embed, view=None)
 
 @bot.command()
 async def blackjack(ctx, bet: int):
@@ -519,11 +519,35 @@ async def blackjack(ctx, bet: int):
         save_balances()
 
     if bet <= 0:
-        await ctx.send("Bet must be positive.")
+        #await ctx.send("Bet must be positive.")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Failed!!",
+            description="Bet must be positive.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     if bet > balances[user]:
-        await ctx.send("You don't have enough money.")
+        #await ctx.send("You don't have enough money.")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Failed!!",
+            description="You don't have enough money.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     balances[user] -= bet
