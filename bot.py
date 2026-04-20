@@ -579,7 +579,7 @@ class BlackjackView(discord.ui.View):
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
         embed.set_thumbnail(url=self.thumbnail_url)
 
-        log_channel = bot.get_channel(YOUR_CHANNEL_ID_HERE)
+        log_channel = bot.get_channel(1486949975274422352)
         await log_channel.send(f"DEBUG: `{self.thumbnail_url}`")
 
 
