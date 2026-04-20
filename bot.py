@@ -27,6 +27,7 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 work_cooldowns = {}
 daily_cooldowns = {}
+beg_cooldowns = {}
 
 # Card deck and balance
 cards = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"]
@@ -235,6 +236,73 @@ async def daily(ctx):
     await ctx.send(file=file, embed=embed)
 
     #await ctx.send(f"💰 {ctx.author.name} claimed $250000!\nBalance: ${balances[user]}")
+
+@bot.command()
+async def beg(ctx):
+    user = ctx.author.id
+    now = time.time()
+
+    if user in beg_cooldowns:
+        last_beg = beg_cooldowns[user]
+
+        if now - last_beg < 300:  # 300 seconds = 5 minutes
+            remaining = int(300 - (now - last_beg))
+            minutes = remaining // 60
+            seconds = remaining % 60
+
+            # attach image
+            file = discord.File("waiting.png", filename="waiting.png")
+
+            embed = discord.Embed(
+                title="🥹 Can't beg now!!",
+                description=f"⏳ Wait {minutes}m {seconds}s before begging again.",
+                color=discord.Color.gold()
+            )
+
+            embed.set_thumbnail(url="attachment://waiting.png")
+
+            await ctx.send(file=file, embed=embed)
+
+            return
+    
+    beg_cooldowns[user] = now
+
+    num = random.randint(0, 99)
+
+    if num % 2 == 0:
+        # attach image
+        file = discord.File("beg.png", filename="beg.png")
+
+        embed = discord.Embed(
+            title="🥹 Begging Failed!!",
+            description=f"You failed to beg",
+            color=discord.Color.gold()
+        )
+
+        embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+        embed.set_thumbnail(url="attachment://beg.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
+    balances[user] += 100000
+    save_balances()
+
+    # attach image
+    file = discord.File("dollars.png", filename="dollars.png")
+
+    embed = discord.Embed(
+        title="💵 Begging Successfully!!",
+        description=f"Begging successfully!! You earned $100000",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Balance", value=f"${balances[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://dollars.png")
+
+    await ctx.send(file=file, embed=embed)
 
 @bot.command()
 async def deposit(ctx, amount: int):
@@ -510,6 +578,10 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
         embed.set_thumbnail(url=self.thumbnail_url)
+
+        log_channel = bot.get_channel(YOUR_CHANNEL_ID_HERE)
+        await log_channel.send(f"DEBUG: `{self.thumbnail_url}`")
+
 
         await interaction.response.edit_message(embed=embed, attachments=[], view=None)
 
