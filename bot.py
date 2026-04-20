@@ -526,7 +526,8 @@ class BlackjackView(discord.ui.View):
             inline=False
         )
 
-        embed.set_thumbnail(url=self.thumbnail_url)
+        DEALER_THUMBNAIL = "https://i.imgur.com/1rHcegU.png"
+        embed.set_thumbnail(url=DEALER_THUMBNAIL)
         await interaction.response.edit_message(embed=embed, attachments=[], view=self)
 
     @discord.ui.button(label="Hit", style=discord.ButtonStyle.green)
@@ -542,7 +543,8 @@ class BlackjackView(discord.ui.View):
             # Player busts → lose bet
             embed = discord.Embed(title="💥 Bust! You lose.")
             embed.add_field(name="Your hand", value=format_hand(self.player))
-            embed.set_thumbnail(url=self.thumbnail_url)
+            DEALER_THUMBNAIL = "https://i.imgur.com/1rHcegU.png"
+            embed.set_thumbnail(url=DEALER_THUMBNAIL)
             
             # Update balance
             await interaction.response.edit_message(embed=embed, attachments=[], view=None)
@@ -577,11 +579,8 @@ class BlackjackView(discord.ui.View):
         embed.add_field(name="Dealer", value=f"{format_hand(self.dealer)} ({dealer_total})", inline=False)
         embed.add_field(name="You", value=f"{format_hand(self.player)} ({player_total})", inline=False)
         embed.set_footer(text=f"Balance: ${balances[self.user_id]}")
-        embed.set_thumbnail(url=self.thumbnail_url)
-
-        log_channel = bot.get_channel(1486949975274422352)
-        await log_channel.send(f"DEBUG: `{self.thumbnail_url}`")
-
+        DEALER_THUMBNAIL = "https://i.imgur.com/1rHcegU.png"
+        embed.set_thumbnail(url=DEALER_THUMBNAIL)
 
         await interaction.response.edit_message(embed=embed, attachments=[], view=None)
 
