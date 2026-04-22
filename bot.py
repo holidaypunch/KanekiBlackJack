@@ -313,7 +313,34 @@ async def deposit(ctx, amount: int):
         save_banks()
 
     if amount > balances[user]:
-        await ctx.send(f"You don't have enough money to deposit!! Put valid amount.")
+        #await ctx.send(f"You don't have enough money to deposit!! Put valid amount.")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Deposit Failed!!",
+            description="You don't have enough money to deposit!! Put valid amount.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
+    if balances[user] + amount < -1000000:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Borrowing Failed!!",
+            description="Your credit score is too low!! Can't borrow, please clear all your debt first",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     balances[user] -= amount
@@ -321,7 +348,40 @@ async def deposit(ctx, amount: int):
     save_balances()
     save_banks
 
-    await ctx.send(f"Successfully sent ${amount} to the bank")
+    if amount >= 0:
+        # attach image
+        file = discord.File("withdraw.png", filename="withdraw.png")
+
+        embed = discord.Embed(
+            title="🏦 Deposit Sucessfully",
+            description=f"Successfully sent ${amount} to the bank",
+            color=discord.Color.gold()
+        )
+
+        embed.add_field(name="💰 Bank", value=f"${banks[user]}", inline=False)
+
+        embed.set_thumbnail(url="attachment://withdraw.png")
+
+        await ctx.send(file=file, embed=embed)
+        return 
+
+    if amount < 0:
+        # attach image
+        file = discord.File("withdraw2.png", filename="withdraw2.png")
+
+        embed = discord.Embed(
+            title="🏦 Borrow Sucessfully",
+            description=f"Successfully borrow ${-amount} from the bank",
+            color=discord.Color.gold()
+        )
+
+        embed.add_field(name="💰 Bank", value=f"${banks[user]}", inline=False)
+
+        embed.set_thumbnail(url="attachment://withdraw2.png")
+
+        await ctx.send(file=file, embed=embed)
+        return 
+    #await ctx.send(f"Successfully sent ${amount} to the bank")
 
 @bot.command()
 async def withdraw(ctx, amount: int):
@@ -331,8 +391,36 @@ async def withdraw(ctx, amount: int):
         banks[user] = 0
         save_banks()
 
-    if amount > banks[user]:
-        await ctx.send(f"You don't have enough money to withdraw!! Put valid amount.")
+    if amount < 0:
+        #await ctx.send(f"You don't have enough money to withdraw!! Put valid amount.")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Withdrawing Failed!!",
+            description="Can't withdraw negative amount.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
+    if banks[user] - amount < -1000000:
+        #await ctx.send(f"You don't have enough money to withdraw!! Put valid amount.")
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Withdrawing Failed!!",
+            description="You don't have enough money to withdraw!! Put valid amount.",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
         return
 
     balances[user] += amount
@@ -340,7 +428,21 @@ async def withdraw(ctx, amount: int):
     save_balances()
     save_banks()
 
-    await ctx.send(f"Successfully withdrew ${amount} from the bank")
+    # attach image
+    file = discord.File("withdraw2.png", filename="withdraw2.png")
+
+    embed = discord.Embed(
+        title="🏦 Withdraw Sucessfully",
+        description=f"Successfully withdrew ${amount} from the bank",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Bank", value=f"${banks[user]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://withdraw2.png")
+
+    await ctx.send(file=file, embed=embed)
+    #await ctx.send(f"Successfully withdrew ${amount} from the bank")
 
 @bot.command()
 async def bank(ctx):
@@ -351,7 +453,85 @@ async def bank(ctx):
         banks[user] = 0
 
     # Show the bank
-    await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
+    # attach image
+    file = discord.File("wallet.png", filename="wallet.png")
+
+    embed = discord.Embed(
+        title="💵 Your balance",
+        description=f"💰 {ctx.author.name}, your bank balance is ${banks[user]}",
+        color=discord.Color.gold()
+    )
+
+    embed.set_thumbnail(url="attachment://wallet.png")
+
+    await ctx.send(file=file, embed=embed)
+    #await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
+
+@bot.command()
+async def pay(ctx, member: discord.Member = None, amount: int):
+    # If the member doesn't exist, send a warning
+    if member is None:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Payment Failed!!",
+            description="Need to specify the payee!!",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
+    user = ctx.author.id  # get the unique ID of the user
+    payee = member.id # get the payee ID
+
+    # If the user doesn't exist in balances, start them at 0
+    if user not in balances:
+        balances[user] = 0
+        save_balances
+    if payee not in banks:
+        banks[payee] = 0
+        save_banks
+
+    if amount > balances[user]:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Payment Failed!!",
+            description="You do not have enough cash to pay!!",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
+    balances[user] -= amount
+    banks[payee] += amount
+    save_balances
+    save_banks
+
+    # attach image
+    file = discord.File("withdraw.png", filename="withdraw.png")
+
+    embed = discord.Embed(
+        title="🏦 Payment Successfully!!",
+        description=f"You successfully paid ${amount} for {member.name}",
+        color=discord.Color.gold()
+    )
+
+    embed.add_field(name="💰 Your Balance", value=f"${balances[user]}", inline=False)
+
+    embed.add_field(name="💰 Payee Bank", value=f"${banks[payee]}", inline=False)
+
+    embed.set_thumbnail(url="attachment://cop.png")
+
+    await ctx.send(file=file, embed=embed)
 
 @bot.command()
 async def rob(ctx, member: discord.Member, amount: int):
