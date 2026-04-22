@@ -470,7 +470,7 @@ async def bank(ctx):
 @bot.command()
 async def pay(ctx, member: discord.Member, amount: int):
     # If the member doesn't exist, send a warning
-    if member is None:
+    if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MemberNotFound):
         # attach image
         file = discord.File("cop.png", filename="cop.png")
 
@@ -517,8 +517,6 @@ async def pay(ctx, member: discord.Member, amount: int):
     save_banks
 
     # attach image
-    file = discord.File("withdraw.png", filename="withdraw.png")
-
     embed = discord.Embed(
         title="🏦 Payment Successfully!!",
         description=f"You successfully paid ${amount} for {member.name}",
@@ -529,7 +527,7 @@ async def pay(ctx, member: discord.Member, amount: int):
 
     embed.add_field(name="💰 Payee Bank", value=f"${banks[payee]}", inline=False)
 
-    embed.set_thumbnail(url="attachment://cop.png")
+    embed.set_thumbnail(url="https://i.imgur.com/nXEOQI1.png")
 
     await ctx.send(file=file, embed=embed)
 
