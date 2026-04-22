@@ -470,7 +470,7 @@ async def bank(ctx):
 @bot.command()
 async def pay(ctx, member: discord.Member, amount: int):
     # If the member doesn't exist, send a warning
-    if isinstance(error, commands.MissingRequiredArgument) or isinstance(error, commands.MemberNotFound):
+    if isinstance(error, (commands.MissingRequiredArgument, commands.MemberNotFound)):
         # attach image
         file = discord.File("cop.png", filename="cop.png")
 
