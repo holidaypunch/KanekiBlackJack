@@ -513,7 +513,7 @@ async def pay(ctx, member: discord.Member, amount: int):
 
     embed.set_thumbnail(url="https://i.imgur.com/nXEOQI1.png")
 
-    await ctx.send(file=file, embed=embed)
+    await ctx.send(embed=embed)
 
 @pay.error
 async def pay_error(ctx, error):
