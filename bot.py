@@ -468,7 +468,7 @@ async def bank(ctx):
     #await ctx.send(f"💰 {ctx.author.name}, your bank balance is ${banks[user]}")
 
 @bot.command()
-async def pay(ctx, member: discord.Member = None, amount: int):
+async def pay(ctx, member: discord.Member, amount: int):
     # If the member doesn't exist, send a warning
     if member is None:
         # attach image
