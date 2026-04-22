@@ -469,22 +469,6 @@ async def bank(ctx):
 
 @bot.command()
 async def pay(ctx, member: discord.Member, amount: int):
-    # If the member doesn't exist, send a warning
-    if isinstance(error, (commands.MissingRequiredArgument, commands.MemberNotFound)):
-        # attach image
-        file = discord.File("cop.png", filename="cop.png")
-
-        embed = discord.Embed(
-            title="❗ Payment Failed!!",
-            description="Need to specify the payee!!",
-            color=discord.Color.gold()
-        )
-
-        embed.set_thumbnail(url="attachment://cop.png")
-
-        await ctx.send(file=file, embed=embed)
-        return
-
     user = ctx.author.id  # get the unique ID of the user
     payee = member.id # get the payee ID
 
@@ -530,6 +514,23 @@ async def pay(ctx, member: discord.Member, amount: int):
     embed.set_thumbnail(url="https://i.imgur.com/nXEOQI1.png")
 
     await ctx.send(file=file, embed=embed)
+
+@pay.error
+async def pay_error(ctx, error):
+    # If the member doesn't exist, send a warning
+    if isinstance(error, (commands.MissingRequiredArgument, commands.MemberNotFound)):
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Payment Failed!!",
+            description="Need to specify the payee!!",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
 
 @bot.command()
 async def rob(ctx, member: discord.Member, amount: int):
