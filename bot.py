@@ -328,7 +328,7 @@ async def deposit(ctx, amount: int):
         await ctx.send(file=file, embed=embed)
         return
 
-    if balances[user] + amount < -1000000:
+    if banks[user] + amount < -1000000:
         # attach image
         file = discord.File("cop.png", filename="cop.png")
 
@@ -480,6 +480,22 @@ async def pay(ctx, member: discord.Member, amount: int):
         banks[payee] = 0
         save_banks
 
+    # prevent donate negative
+    if amount < 0:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="❗ Paying Failed!!",
+            description="You can't pay negative amount 💀",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
+
     if amount > balances[user]:
         # attach image
         file = discord.File("cop.png", filename="cop.png")
@@ -536,6 +552,22 @@ async def pay_error(ctx, error):
 async def rob(ctx, member: discord.Member, amount: int):
     user = ctx.author.id
     victim = member.id
+
+    # prevent rob negative
+    if amount < 0:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Robbing Failed!!",
+            description="You can't rob negative amount 💀",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
 
     # prevent self rob
     if user == victim:
@@ -600,6 +632,22 @@ async def rob(ctx, member: discord.Member, amount: int):
 async def donate(ctx, member: discord.Member, amount: int):
     user = ctx.author.id
     victim = member.id
+
+    # prevent donate negative
+    if amount < 0:
+        # attach image
+        file = discord.File("cop.png", filename="cop.png")
+
+        embed = discord.Embed(
+            title="🚔 Donating Failed!!",
+            description="You can't donate negative amount 💀",
+            color=discord.Color.gold()
+        )
+
+        embed.set_thumbnail(url="attachment://cop.png")
+
+        await ctx.send(file=file, embed=embed)
+        return
 
     # prevent self donate
     if user == victim:
